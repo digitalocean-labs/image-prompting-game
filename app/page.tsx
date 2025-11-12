@@ -34,7 +34,7 @@ export default function Home() {
     }
     
     // Check if game is over
-    if (gameRound >= 10) {
+    if (gameRound >= 5) {
       setGameOver(true)
       return
     }
@@ -115,8 +115,8 @@ export default function Home() {
       total: prev.total + 1,
     }))
     
-    // Check if this was the 10th image
-    if (gameRound >= 10) {
+    // Check if this was the 5th image
+    if (gameRound >= 5) {
       setGameOver(true)
     }
   }
@@ -140,66 +140,70 @@ export default function Home() {
   }, [])
 
   return (
-    <main className="min-h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 p-4 md:p-8">
-      <div className="max-w-4xl mx-auto">
-        <div className="text-center mb-8">
-          <h1 className="text-5xl font-bold text-gray-900 mb-2">
+    <main className="h-screen bg-gradient-to-br from-purple-50 via-blue-50 to-pink-50 p-2 md:p-4 overflow-hidden">
+      <div className="max-w-4xl mx-auto h-full flex flex-col">
+        <div className="text-center mb-2 flex-shrink-0">
+          <h1 className="text-2xl md:text-3xl font-bold text-gray-900 mb-1">
             🎨 Guess the Prompt
           </h1>
-          <p className="text-xl text-gray-600">
+          <p className="text-sm md:text-base text-gray-600">
             Can you tell which prompt was used to generate this image?
           </p>
         </div>
 
-        {mounted && <GameStats stats={stats} />}
+        {mounted && <div className="flex-shrink-0"><GameStats stats={{
+          totalGuesses: gameStats.total,
+          correctGuesses: gameStats.correct,
+          accuracy: gameStats.total > 0 ? (gameStats.correct / gameStats.total) * 100 : 0
+        }} /></div>}
 
         {gameOver ? (
-          <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6 text-center">
-            <div className="text-6xl mb-6">🎉</div>
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Game Over!</h2>
-            <p className="text-xl text-gray-600 mb-8">
-              You completed 10 rounds!
+          <div className="bg-white rounded-xl shadow-xl p-4 mb-2 text-center flex-1 flex flex-col justify-center">
+            <div className="text-4xl mb-2">🎉</div>
+            <h2 className="text-2xl font-bold text-gray-900 mb-2">Game Over!</h2>
+            <p className="text-sm text-gray-600 mb-4">
+              You completed 5 rounds!
             </p>
-            <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-xl p-6 mb-6">
-              <p className="text-2xl font-bold text-gray-800 mb-2">
+            <div className="bg-gradient-to-r from-purple-50 to-blue-50 rounded-lg p-3 mb-4">
+              <p className="text-lg font-bold text-gray-800 mb-1">
                 Final Score: {gameStats.correct} / {gameStats.total}
               </p>
-              <p className="text-lg text-gray-600">
+              <p className="text-sm text-gray-600">
                 Accuracy: {gameStats.total > 0 ? ((gameStats.correct / gameStats.total) * 100).toFixed(1) : 0}%
               </p>
             </div>
             <button
               onClick={startNewGame}
-              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg"
+              className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-2 rounded-lg text-sm font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg"
             >
               🎮 Start New Game
             </button>
           </div>
         ) : (
-          <div className="bg-white rounded-2xl shadow-xl p-6 md:p-8 mb-6">
+          <div className="bg-white rounded-xl shadow-xl p-3 md:p-4 mb-2 flex-1 flex flex-col min-h-0 overflow-hidden">
             {gameRound > 0 && (
-              <div className="mb-4 text-center">
-                <p className="text-lg font-semibold text-gray-700">
-                  Round {gameRound} / 10
+              <div className="mb-4 text-center flex-shrink-0">
+                <p className="text-sm font-semibold text-gray-700">
+                  Round {gameRound} / 5
                 </p>
-                <div className="w-full bg-gray-200 rounded-full h-2.5 mt-2">
+                <div className="w-full bg-gray-200 rounded-full h-2 mt-1">
                   <div
-                    className="bg-gradient-to-r from-purple-600 to-blue-600 h-2.5 rounded-full transition-all duration-300"
-                    style={{ width: `${(gameRound / 10) * 100}%` }}
+                    className="bg-gradient-to-r from-purple-600 to-blue-600 h-2 rounded-full transition-all duration-300"
+                    style={{ width: `${(gameRound / 5) * 100}%` }}
                   ></div>
                 </div>
               </div>
             )}
 
             {!currentImage && !loading && (
-              <div className="text-center py-12">
-                <p className="text-gray-600 text-lg mb-6">
-                  Click the button below to start guessing! (10 rounds)
+              <div className="text-center py-4 flex-1 flex flex-col justify-center items-center">
+                <p className="text-gray-600 text-sm mb-4">
+                  Click the button below to start guessing! (5 rounds)
                 </p>
                 <button
                   onClick={generateNewImage}
                   disabled={loading}
-                  className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-8 py-4 rounded-xl text-lg font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
+                  className="w-auto bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-lg text-base font-semibold hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                   type="button"
                 >
                   🎲 Generate New Image
@@ -208,18 +212,18 @@ export default function Home() {
             )}
 
           {loading && (
-            <div className="text-center py-12">
-              <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-purple-600 mb-4"></div>
-              <p className="text-gray-600">Generating image...</p>
+            <div className="text-center py-4 flex-1 flex flex-col justify-center items-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600 mb-2"></div>
+              <p className="text-gray-600 text-sm">Generating image...</p>
             </div>
           )}
 
           {error && (
-            <div className="bg-red-50 border border-red-200 rounded-lg p-4 mb-4">
-              <p className="text-red-800">{error}</p>
+            <div className="bg-red-50 border border-red-200 rounded-lg p-2 mb-2 flex-shrink-0">
+              <p className="text-red-800 text-sm">{error}</p>
               <button
                 onClick={generateNewImage}
-                className="mt-2 text-red-600 hover:text-red-800 underline"
+                className="mt-1 text-red-600 hover:text-red-800 underline text-xs"
               >
                 Try again
               </button>
@@ -227,40 +231,40 @@ export default function Home() {
           )}
 
           {currentImage && !loading && (
-            <>
-              <div className="mb-6 flex justify-center">
-                <div className="relative w-full max-w-md aspect-square rounded-xl overflow-hidden bg-gray-100 shadow-lg">
+            <div className="flex-1 flex flex-col min-h-0 overflow-hidden">
+              <div className="mb-4 flex justify-center flex-shrink-0">
+                <div className="relative w-full max-w-xs aspect-square rounded-lg overflow-hidden shadow-lg">
                   <Image
                     src={currentImage.imageUrl}
                     alt="Generated image"
                     fill
-                    className="object-contain"
+                    className="object-cover"
                     unoptimized
                   />
                 </div>
               </div>
 
               {!showResult ? (
-                <div>
-                  <h2 className="text-2xl font-bold text-center mb-6 text-gray-800">
+                <div className="flex-1 flex flex-col min-h-0">
+                  <h2 className="text-base font-bold text-center mb-3 text-gray-800 flex-shrink-0">
                     Which prompt was used to generate this image?
                   </h2>
-                  <div className="space-y-3">
+                  <div className="space-y-2 overflow-y-auto flex-1">
                     {currentImage.promptOptions.map((prompt, index) => (
                       <button
                         key={index}
                         onClick={() => handleGuess(prompt)}
-                        className="w-full text-left bg-gray-50 hover:bg-purple-50 border-2 border-gray-200 hover:border-purple-300 rounded-lg p-4 transition-all transform hover:scale-[1.02]"
+                        className="w-full text-left bg-gray-50 hover:bg-purple-50 border-2 border-gray-200 hover:border-purple-300 rounded-lg p-2 transition-all transform hover:scale-[1.01]"
                       >
-                        <p className="text-gray-800 font-medium">{prompt}</p>
+                        <p className="text-gray-800 font-medium text-sm">{prompt}</p>
                       </button>
                     ))}
                   </div>
                 </div>
               ) : (
-                <div className="text-center">
+                <div className="text-center flex-1 flex flex-col justify-center min-h-0 overflow-y-auto">
                   <div
-                    className={`text-4xl mb-4 ${
+                    className={`text-2xl mb-2 flex-shrink-0 ${
                       guessedPrompt === currentImage.actualPrompt
                         ? 'text-green-600'
                         : 'text-red-600'
@@ -268,34 +272,34 @@ export default function Home() {
                   >
                     {guessedPrompt === currentImage.actualPrompt ? '✅ Correct!' : '❌ Wrong!'}
                   </div>
-                  <p className="text-xl font-semibold text-gray-800 mb-2">
+                  <p className="text-sm font-semibold text-gray-800 mb-1 flex-shrink-0">
                     The correct prompt was:
                   </p>
-                  <p className="text-lg text-purple-600 mb-4 bg-purple-50 rounded-lg p-4">
+                  <p className="text-xs text-purple-600 mb-2 bg-purple-50 rounded-lg p-2 flex-shrink-0">
                     &ldquo;{currentImage.actualPrompt}&rdquo;
                   </p>
                   {guessedPrompt !== currentImage.actualPrompt && (
                     <>
-                      <p className="text-gray-600 mb-2">
+                      <p className="text-gray-600 mb-1 text-sm flex-shrink-0">
                         You guessed:
                       </p>
-                      <p className="text-lg text-gray-500 mb-4 bg-gray-50 rounded-lg p-4">
+                      <p className="text-xs text-gray-500 mb-2 bg-gray-50 rounded-lg p-2 flex-shrink-0">
                         &ldquo;{guessedPrompt}&rdquo;
                       </p>
                     </>
                   )}
-                  <div className="flex gap-4 justify-center">
-                    {gameRound < 10 ? (
+                  <div className="flex gap-2 justify-center flex-shrink-0">
+                    {gameRound < 5 ? (
                       <button
                         onClick={generateNewImage}
-                        className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg"
+                        className="bg-gradient-to-r from-purple-600 to-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-purple-700 hover:to-blue-700 transition-all shadow-lg"
                       >
-                        🎲 Next Image ({10 - gameRound} left)
+                        🎲 Next ({5 - gameRound} left)
                       </button>
                     ) : (
                       <button
                         onClick={() => setGameOver(true)}
-                        className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-6 py-3 rounded-xl font-semibold hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg"
+                        className="bg-gradient-to-r from-green-600 to-emerald-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:from-green-700 hover:to-emerald-700 transition-all shadow-lg"
                       >
                         🎉 Finish Game
                       </button>
@@ -303,7 +307,7 @@ export default function Home() {
                   </div>
                 </div>
               )}
-            </>
+            </div>
           )}
           </div>
         )}
