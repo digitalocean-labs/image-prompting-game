@@ -19,7 +19,7 @@ npm install
 
 2. Create a `.env.local` file with your API key:
 ```
-FAL_AI_API_KEY=your_fal_ai_key
+MODEL_ACCESS_KEY=your_model_access_key
 ```
 
 3. Run the development server:
@@ -44,7 +44,7 @@ npm run dev
 2. Navigate to Gradient AI Platform
 3. Opt in to the public preview (takes 10-15 minutes for access)
 4. Get your Model Access Key from the Gradient AI Platform dashboard
-5. Use this key as `FAL_AI_API_KEY` in your `.env.local`
+5. Use this key as `MODEL_ACCESS_KEY` in your `.env.local`
 6. Reference: [DigitalOcean fal.ai blog post](https://www.digitalocean.com/blog/fal-ai-image-models-gradient-ai-platform)
 
 ## Features Breakdown
